@@ -1,0 +1,5 @@
+These are Optional but helpful and common practice Steps
+The team should agree on a branching strategy, such as creating a development branch and feature branches for each new feature. Each team member should create their own branch to work on using git checkout -b <branch-name>.
+Each team member should make changes to their own branch, commit them, and push them to the repository using git add ., git commit -m "<commit-message>", and git push origin <branch-name>.
+When a feature is complete, the team should merge the feature branch into the development branch using git checkout development, git merge <feature-branch-name>, and git push origin development.
+If the team needs to revert changes or fix issues, they can use git revert or git reset.
