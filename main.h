@@ -26,6 +26,5 @@ int _putchar(char c);
 int _putstr(char *str);
 int _putint(int inum);
 int _putfloat(float fnum);
->>>>>>> f30836aafb267ffc7edbb57c4eadd5ca16b87c4a
 
 #endif
