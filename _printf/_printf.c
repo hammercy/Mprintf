@@ -1,6 +1,3 @@
-#include <stdlib.h>
-#include <stdarg.h>
-#include <unistd.h>
 #include "main.h"
 
 /**
@@ -13,14 +10,14 @@
 
 int _printf(const char *format, ...)
 {
-	uint i = 0, j = 0, k = 0, n = 0, d = 0, ij = 0, ck = 0;
+	int i = 0, j = 0, k = 0, n = 0, d = 0, ij = 0, ck = 0, l = 0;
 	int cnt = 0;
-	int numflags = 10;
-	char **convspcfr = {"s","cdi","bouxX","fFeEgGaA","p"};
-	// s-0,c-1,b-2,f-3,p-4,
-	
+	int numflgs = 10, numcnv = 19;
+	char *convspcfr[] = {"s","cdi","bouxX","fFeEgGaA","p"};
+	/* s-0,c-1,b-2,f-3,p-4, */
 	char *flags = "#+ 0-'*$I";
-	char *lengmdfr = "hlLzt";// h-1,l-2,L-3,z-4,t-5,hh-6,ll-7
+	char *lengmdfr = "hlLzt";
+/* h-1,l-2,L-3,z-4,t-5,hh-6,ll-7*/
 	char *charnum = "0123456789";
 	char *insrtdataflag = "*$0#*";
 	char strbuffer[BUFFERSIZE];
@@ -52,7 +49,7 @@ int _printf(const char *format, ...)
 				arrdata[j]->getcnvindex = 7;
 				arrdata[j]->tostrindex = 20;
 				arrdata[j]->convspcfr = '\0';
-				for (k = 0; k < numflags; k++)
+				for (k = 0; k < numflgs; k++)
 					arrdata[j]->flags[k] = '\0';
 			}
 			n = 0;
@@ -103,7 +100,7 @@ int _printf(const char *format, ...)
 						i++;
 				
 					} while (format[i] > 47 && format[i] < 58);
-					arrdata[j]->fwidth == fwp_num;			
+					arrdata[j]->fwidth = fwp_num;			
 					
 				}
 				if (format[i] > 48 && format[i] < 58)
@@ -134,16 +131,16 @@ int _printf(const char *format, ...)
 					}
 				}
 				ck = 0;
-				for (l = 0; l < numconv; )
+				for (l = 0; l < numcnv; )
 				{					
 					for (k = 0; convspcfr[l][k] != '\0'; k++)
 					{
 						
 						if (format[i] == convspcfr[l][k])
 						{
-							arrdata->convspcfr = foramt[i];
-							arrdata->getcnvindex = l;
-							arrdata->tostrindex = ck;
+							arrdata[j]->convspcfr = format[i];
+							arrdata[j]->getcnvindex = l;
+							arrdata[j]->tostrindex = ck;
 							convspflag = 0;
 							ck = 0;
 							for (d = 0; insrtdataflag[d] != '\0'; d++)
@@ -152,7 +149,7 @@ int _printf(const char *format, ...)
 								ij++;
 							
 							}
-							l = numconv + 10;
+							l = numcnv + 10;
 							break;
 							
 						}
@@ -178,7 +175,7 @@ int _printf(const char *format, ...)
 		i++;
 	}
 
-	_getdata(arrdata, arg, convspcfr);	
+	_getdata(arrdata, &ap);	
 	cnt = _printstrdata(strbuffer, arrdata);
 	return (cnt);
 }

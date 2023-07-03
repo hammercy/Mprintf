@@ -1,0 +1,422 @@
+#include "main.h"
+/**
+ * _putstr - format string in the specified format
+ * @ptrdata: pointer to string to be formated
+ * @fwidth: field width for the data the minimum array size for the string
+ * @precision: precision for decial point ingonerd in this function.
+ * @flags: pointer to flags that indicate how to be formated. such alignment
+ * 
+ * Return: pointer to the formated string.
+ */
+char *_putstr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv)
+{
+	int slen, strln, ln;
+	int i;
+	char *strptr;
+	char *sptr = (char *)ptrdata;
+	
+	(void)prcn;
+	(void)cnv;
+	slen = _strlen(sptr);
+
+	if (slen < fwdth)
+	{
+		strln = fwdth + 1;
+		ln = fwdth - slen;
+		strptr = (char *)malloc(strln * sizeof(char));
+		if (strptr != NULL && flags[4] != '-')
+		{
+			for (i = 0; i < ln; i++)
+				strptr[i] = ' ';
+			for (i = ln; i < strln - 1; i++)
+				strptr[i] = sptr[i - ln];
+			strptr[strln - 1] = '\0';
+		}
+		else if (strptr != NULL  && flags[4] == '-')
+		{
+			for (i = 0; i < slen; i++)
+				strptr[i] = sptr[i];
+			for (i = slen; i < strln - 1; i++)
+				strptr[i] = ' ';
+			strptr[strln - 1] = '\0';
+		}
+		else if (strptr == NULL)
+		{
+			return (NULL);
+		}
+			
+	}
+	else
+	{
+		strln = slen + 1;
+		strptr = (char *)malloc((strln) * sizeof(char));
+		if (strptr == NULL)
+			return (NULL);
+		else
+		{
+			for (i = 0; i < strln - 1; i++)
+				strptr[i] = sptr[i];
+			strptr[strln - 1] = '\0';
+		}
+	}
+	return (strptr);
+}
+/**
+ * _ctstr - change character to string for printing by printf
+ * @ptrdata: pointer to string to be formated
+ * @fwdth: field width for the data the minimum array size for the string
+ * @prcn: precision for decial point ingonerd in this function.
+ * @flags: pointer to flags that indicate how to be formated. such alignment
+ * @cnv: holds the conversion specifier.
+ *
+ * Return: pointer to the formated string.
+ */
+char *_ctstr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv)
+{
+	char *strptr;
+	char *cptr = (char *)ptrdata;
+
+	(void)(fwdth + prcn + cnv + flags);
+
+	UNUSED(fwdth);
+	UNUSED(prcn);
+	UNUSED(flags);
+	UNUSED(cnv);
+
+	strptr = (char *)malloc(2*sizeof(char));
+	if (strptr == NULL)
+	{
+		return (NULL);
+	}
+	else
+	{
+		strptr[0] = cptr[0];
+		strptr[1] = '\0';
+	}
+	free (ptrdata);
+	return (strptr);
+}
+
+char *_brkdGttostr(size_t dGtnum)
+{
+	char *arrstr;
+	char *dGtstr = "0123456789";
+	size_t b, c, cntdGt;
+	size_t i, j;
+	size_t maxdGt = 20;
+	size_t mult = 10000000000000000000;
+
+	cntdGt = maxdGt;
+	b = dGtnum;
+	for (i = 0; i < maxdGt; i++)
+	{
+		if ((b / mult) != 0)
+			break;
+		cntdGt = cntdGt - 1;
+		b = b % mult;
+		mult = mult / 10;
+	}
+	arrstr = malloc((cntdGt + 1) * sizeof(*arrstr));
+
+	j = 0;
+	for (i = cntdGt; i > 0; i--)
+	{
+		c = uinum / mult;
+		arrstr[j] = dGtstr[c];
+		dGtnum = dGtnum % mult;
+		mult = mult / 10;
+		j++;
+	}
+	arrstr[j + 1] = '\0';
+	return (arrstr);
+
+}
+/**
+ *_itstr - change character to string for printing by printf
+ * @ptrdata: pointer to string to be formated
+ * @fwdth: field width for the data the minimum array size for the string
+ * @prcn: precision for decial point ingonerd in this function.
+ * @flags: pointer to flags that indicate how to be formated. such alignment
+ * @cnv: holds the conversion specifier.
+ *
+ * Return: pointer to the formated string.
+ */
+char *_itstr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv)
+{
+
+	int *iptr;
+	int inum;
+	char *dGtstr, *istr;
+
+	iptr = (int *)ptrdata;
+	inum = *iptr;
+	if (inum < 0)
+	{
+		inum =  -1 * inum;
+		dGtstr = _brkdGttostr((size_t)inum);
+	}
+	if (inum == 0)
+	{
+	       if (fwdth > 1)
+	       {
+		       istr = (char *)malloc(fwdth + 1);
+		       if (istr == NULL)
+			       return (NULL);
+		       if (flags[3] == '0' && flags[4] != '-')
+		       {
+			       for (i = 0; i < fwdth; i++)
+				       istr[i] = '0';
+			       istr[i + 1] = '\0';
+			       if (flags[1] == '+')
+				       istr[0] = '+';
+			       else if (flags[1] == '@' && flags[2] == ' ')
+				       istr[0] = ' ';
+		       }
+		       else if (flags[3] == ' ' && flags[4] != '-')
+		       {
+			       for (i = 0; i < fwdth - 1; i++)
+				       istr[i] = ' ';
+			       istr[i] = '0';
+			       if (flags[1] == '+')
+				       istr[i - 1] = '+';
+			       else if (flags[1] == '@' && flags[2] == ' ')
+				       istr[i - 1] = ' ';
+
+			       istr[i + 1] = '\0';
+			       
+		       }
+		       else if (flags[4] == '-')
+		       {
+			       if (flags[1] == '+')
+			       {
+				       istr[0] = '+';
+				       istr[1] = '0';
+				       j = 2
+			       }
+			       else if (flags[1] != '+' && flags[2] == ' ')
+			       {
+				       istr[0] = ' ';
+				       istr[1] = '0';
+				       j = 2
+			       }
+			       else
+			       {
+				       istr[0] = '0';
+				       j = 1;
+			       }
+			       for (; j < fwdth; j++)
+				       istr[j] = ' ';
+			       istr[j] = '\0';
+		       }
+	       
+	       }//fwdth
+	       else if (fwdth == 1)
+	       {
+		       istr = (char *)malloc(fwdth + 1);
+		       if (istr == NULL)
+			       return (NULL);
+		       istr[0] = '0';
+		       istr[1] = '\0';
+	       }
+		       
+	}//inum
+	else
+	{
+		dGtstr = _brkdGttostr((size_t)inum);
+		strln = _strlen(dGtstr);
+		if (fwdth > strlen + 1)
+		{
+			istr = (char *
+			if (
+			
+		
+		
+	UNUSED(fwdth);
+	UNUSED(prcn);
+	UNUSED(flags);
+	UNUSED(cnv);
+	
+
+	ptr = (char *)ptrdata;
+	return (ptr);
+}
+/**
+ *_ui2binstr - change character to string for printing by printf
+ * @ptrdata: pointer to string to be formated
+ * @fwdth: field width for the data the minimum array size for the string
+ * @prcn: precision for decial point ingonerd in this function.
+ * @flags: pointer to flags that indicate how to be formated. such alignment
+ * @cnv: holds the conversion specifier.
+ *
+ * Return: pointer to the formated string.
+ */
+char *_ui2binstr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv)
+{
+	char * ptr;
+	UNUSED(fwdth);
+	UNUSED(prcn);
+	UNUSED(flags);
+	UNUSED(cnv);
+
+	ptr = (char *)ptrdata;
+	return (ptr);
+}
+/**
+ *_ui2octstr - change character to string for printing by printf
+ * @ptrdata: pointer to string to be formated
+ * @fwdth: field width for the data the minimum array size for the string
+ * @prcn: precision for decial point ingonerd in this function.
+ * @flags: pointer to flags that indicate how to be formated. such alignment
+ * @cnv: holds the conversion specifier.
+ *
+ * Return: pointer to the formated string.
+ */
+char *_ui2octstr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv)
+{
+	char * ptr;
+
+	(void)(fwdth + prcn + cnv + flags);
+	ptr = (char *)ptrdata;
+	return (ptr);
+}
+
+/**
+ *_ui2hexstr - change character to string for printing by printf
+ * @ptrdata: pointer to string to be formated
+ * @fwdth: field width for the data the minimum array size for the string
+ * @prcn: precision for decial point ingonerd in this function.
+ * @flags: pointer to flags that indicate how to be formated. such alignment
+ * @cnv: holds the conversion specifier.
+ *
+ * Return: pointer to the formated string.
+ */
+char *_ui2hexstr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv)
+{
+	char * ptr;
+
+	(void)(fwdth + prcn + cnv + flags);
+
+	ptr = (char *)ptrdata;
+	return (ptr);
+}
+/**
+ * _dftstr - change character to string for printing by printf
+ * @ptrdata: pointer to string to be formated
+ * @fwdth: field width for the data the minimum array size for the string
+ * @prcn: precision for decial point ingonerd in this function.
+ * @flags: pointer to flags that indicate how to be formated. such alignment
+ * @cnv: holds the conversion specifier.
+ *
+ * Return: pointer to the formated string.
+ */
+char *_dftstr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv)
+{
+	char * ptr;
+	(void)(fwdth + prcn + cnv + flags);
+	ptr = (char *)ptrdata;
+	return (ptr);
+}
+
+/**
+ * _detstr - change character to string for printing by printf
+ * @ptrdata: pointer to string to be formated
+ * @fwdth: field width for the data the minimum array size for the string
+ * @prcn: precision for decial point ingonerd in this function.
+ * @flags: pointer to flags that indicate how to be formated. such alignment
+ * @cnv: holds the conversion specifier.
+ *
+ * Return: pointer to the formated string.
+ */
+char *_detstr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv)
+{
+	char * ptr;
+
+	(void)(fwdth + prcn + cnv + flags);
+	ptr = (char *)ptrdata;
+	return (ptr);
+}
+/**
+ * dgtostr - change character to string for printing by printf
+ * @ptrdata: pointer to string to be formated
+ * @fwdth: field width for the data the minimum array size for the string
+ * @prcn: precision for decial point ingonerd in this function.
+ * @flags: pointer to flags that indicate how to be formated. such alignment
+ * @cnv: holds the conversion specifier.
+ *
+ * Return: pointer to the formated string.
+ */
+char *_dgtstr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv)
+{
+	char * ptr;
+
+	(void)(fwdth + prcn + cnv + flags);
+	ptr = (char *)ptrdata;
+	return (ptr);
+}
+
+/**
+ * _datstr - change character to string for printing by printf
+ * @ptrdata: pointer to string to be formated
+ * @fwdth: field width for the data the minimum array size for the string
+ * @prcn: precision for decial point ingonerd in this function.
+ * @flags: pointer to flags that indicate how to be formated. such alignment
+ * @cnv: holds the conversion specifier.
+ *
+ * Return: pointer to the formated string.
+ */
+char *_datstr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv)
+{
+	char * ptr;
+	(void)(fwdth + prcn + cnv + flags);
+	ptr = (char *)ptrdata;
+	return (ptr);
+}
+/**
+ * _putptr - change character to string for printing by printf
+ * @ptrdata: pointer to string to be formated
+ * @fwdth: field width for the data the minimum array size for the string
+ * @prcn: precision for decial point ingonerd in this function.
+ * @flags: pointer to flags that indicate how to be formated. such alignment
+ * @cnv: holds the conversion specifier.
+ *
+ * Return: pointer to the formated string.
+ */
+char *_putptr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv)
+{
+	char * ptr;
+	uint size = 23;
+	char *arrstr = (char *)malloc(size);
+	char *strHex = {"0123456789abcdef", "0123456789ABCDEF"};
+	uint maxdGt = 20;
+	uint i, j;
+	size_t mask = 17293822569102704640;
+        size_t tmp = 0;
+	size_t paddr;
+	size_t arrint[maxdGt];
+	
+	(void)(fwdth + prcn + cnv + flags);
+	paddr = (size_t)strdata;
+	arrstr[0] = '0';
+	arrstr[1] = 'x';
+	for (i = 0; i < maxdGt; i++)
+	{
+		tmp = (paddr);
+		tmp = tmp & mask;
+		paddr = paddr << 4;
+		arrint[i] = tmp;
+	}
+		
+	for (j = 0; arrint[j] == 0; j++)
+			;
+	while ( j < maxdGt)
+	{
+		temp = arrint[j + i];
+		arrstr[2 + i] = strHex[0][temp];
+
+	}
+
+	
+	free(strdata);
+	
+	return (arrstr);
+}

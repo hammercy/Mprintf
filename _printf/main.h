@@ -1,18 +1,22 @@
 #ifndef MAIN_H
 #define MAIN_H
-
-#define UNSED(x) (void)(x)
+#include <stdarg.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <stddef.h>
+#include <limits.h>
+#define UNUSED(x) (void)(x)
 #define BUFFERSIZE 1024
 
 typedef unsigned int uint;
 typedef unsigned long int ulint;
 typedef long int lint;
-typedef long long int llint;
-typedef unsigned long long int ullint;
+/*typedef long long int llint;
+  typedef unsigned long long int ullint;*/
 typedef short int sint;
 typedef unsigned short int usint;
-typedef short char schar;
-typedef unsigned short char uschar;
+/*typedef short char schar;
+  typedef unsigned short char uschar; */
 typedef long double ldouble;
 /**
  * struct formatdata - structure for data string to be foramted and its flags
@@ -50,54 +54,45 @@ struct dataformat
 	char convspcfr;
 	char flags[10];
 };
+char *_brkdGttostr(size_t dGtnum);
+int _xgetfwdth(va_list *ap);
+int _xgetprcn(va_list *ap);
+void *_xgetint(va_list *ap);
+void *_xgetdouble(va_list *ap);
+void *_xgetuint(va_list *ap);
+void *_xgetstr(va_list *ap);
+void *_xgetptr(va_list *ap);
+void *_getchar(va_list *ap);
+/*void *getschar(va_list);*
+  void *getuschar(va_list);*/	
+void *_xgetsint(va_list *ap);
+void *_xgetusint(va_list *ap);
+void *_xgetlint(va_list *ap);
+void *_xgetulint(va_list *ap);
+/*void *getllint(va_list *ap);
+  void *getullint(va_list *ap);*/
+void *_xgetldouble(va_list *ap);
+/*void *getwchar(va_list *ap);
+void *getintmax(va_list *ap);
+void *getwint(va_list *ap);
+void *getsize_t(va_list *ap);
+void *getssize_t(va_list *ap);*/
 
-void *getint(va_list);
-void *getdouble(va_list);
-void *getuint(va_list);
-void *getstr(va_list);
-void *getchar(va_list);
-void *getschar(va_list);
-void *getuschar(va_list);	
-void *getsint(va_list);
-void *getusint(va_list);
-void *getlint(va_list);
-void *getulint(va_list);
-void *getllint(va_list);
-void *getullint(va_list);
-void *getldouble(va_list);
-void *getwchar(va_list);
-void *getintmax(va_list);
-void *getwint(va_list);
-void *getsize_t(va_list);
-void *getssize_t(va_list);
 int _printf(const char *format, ...);
 int _putchar(char c);
 int _strlen(char *s);
 char *_putstr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv);
-char *_ctostr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv);
-char *_itostr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv);
+char *_ctstr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv);
+char *_itstr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv);
 char *_ui2binstr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv);
 char *_ui2octstr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv);
 char *_ui2hexstr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv);
-char *dftostr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv);
-char *detostr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv);
-char *dgtostr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv);
-char *datostr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv);
+char *_dftstr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv);
+char *_detstr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv);
+char *_dgtstr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv);
+char *_datstr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv);
 char *_putptr(void *ptrdata, int fwdth, int prcn, char *flags, char cnv);
-int _printstrdata(char *strbuffer, struct dataformat **arrdata);
-int _getdata(struct dataformat *arrdata[], va_list arg);
-void *(*getptrfun[8][5])(va_list ap) = {{getstr, getint,getuint,getdouble,getptr},\
-					{NULL,getsint,getusint,NULL,NULL,NULL}, \
-					{getwchar,getlint,getulint,NULL,NULL},\
-					{NULL, getllint,getullint,getldouble,NULL},\
-					{NULL,getssize_t,getsize_t,NULL,NULL},\
-					{NULL,NULL,NULL,NULL,NULL,NULL},\
-					{NULL,getllint,getullint,getldouble,NULL}
-					{NULL,getschar, getuschar,NULL,NULL}};
-
-
-char *(*tostrptrfun[])(void *ptrdata, int fwdth, int prcn, char *flags, char *cnvchar) = { _putstr,_ctostr,_itostr,_itostr, _ui2binstr,_ui2octstr,_ui2hexstr,_ui2hexstr,dftostr, dftostr,detostr,detostr, dgtostr, dgtostr,datostr, datostr, _putptr};
-
-
+int _printstrdata(char *strbuffer, struct dataformat *arrdata[]);
+int _getdata(struct dataformat *garrdata[], va_list *ap);
 
 #endif
