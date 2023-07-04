@@ -18,20 +18,20 @@ char * _handleflgs(char *dGtstr, char *ifstr, int dffln, int sign, char *flags)
 	int pk;
 	int dk;
 	char pchar;
-	char arr[dffln + 1];
+	char arr[dffln];
 	for (i = 0; i < dffln; i++)
 		arr[i] = '\0';
 
-	if (flags[3] == 0 && flags[4] != '-')
+	if (flags[3] == '0' && flags[4] != '-')
 	{
 		sk = 0;
-		for (pk = 1; pk < dffln; pk++)
+		for (pk = 1; pk < dffln - 1; pk++)
 			arr[pk] = '0';
 	}
-	else if (flags[3] == ' ' && flags[4] != '-')
+	else if (flags[3] != '0' && flags[4] != '-')
 	{
-		sk = dffln - 1;
-		for (pk = 0; pk < dffln -2; pk++)
+		sk = dffln - 2;
+		for (pk = 0; pk < dffln - 2; pk++)
 			arr[pk] = ' ';
 	}
 	else
@@ -59,16 +59,16 @@ char * _handleflgs(char *dGtstr, char *ifstr, int dffln, int sign, char *flags)
 		else if (sign = 1)
 			arr[sk] = '-';
 	}
-	k = 0;
-	while (arr[k] != '\0')
+	
+	for (k = 0; arr[k] != '\0'; k++)
 	{
 		ifstr[k] = arr[k];
-		k++;
+		
 	}
-	while (dGtstr[k] != '\0')
+	for (k = 0; dGtstr[k] != '\0'; k++)
 	{
 		ifstr[k] = dGtstr[k];
-		k++;
+		
 	}
 	ifstr[k] == '\0';
 	return (ifstr);
